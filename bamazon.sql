@@ -12,6 +12,6 @@ CREATE TABLE products (
     );
     
     INSERT INTO products (product_name, department_name, price, stock_quantity)
-    VALUES ("Sunglasses", "Clothing", 10, 150), ("Sombrero", "Clothing", 20, 50), ("Macbook", "Electronics", 450, 10), ("Power Drill", "Tools", 45, 120), ("Wooden Chair", "Furniture", 125, 55), ("FlatScreen TV", "Electronics", 1450, 35), ("Nightstand Lamp", "Electronics", 40, 190), ("Blue Jeans", "Clothing", 35, 105), ("Candles", "Home", 05, 320), ("Dinner Table", "Furniture", 980, 53)
+    VALUES ("Sunglasses", "Clothing", 10, 150), ("Sombrero", "Clothing", 20, 50), ("Macbook", "Electronics", 450, 10), ("Drill", "Tools", 45, 120), ("Chair", "Furniture", 125, 55), ("TV", "Electronics", 1450, 35), ("Lamp", "Electronics", 40, 190), ("Jeans", "Clothing", 35, 105), ("Candles", "Home", 05, 320), ("Table", "Furniture", 980, 53)
     
     
