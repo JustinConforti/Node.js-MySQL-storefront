@@ -93,7 +93,7 @@ var connection = mysql.createConnection({
             function(error) {
               if (error) throw error;
               console.log("Database successfully updated");
-              displayItems();
+              displayItems()
             }
           );
         }
