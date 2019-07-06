@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer")
+const cTable = require('console.table');
 let title = "ID" + "    " + "Product Name" + "   " + "Price" + "    " + "Stock Quantity"
 
 
@@ -25,18 +26,16 @@ var connection = mysql.createConnection({
     function displayItems() {
         connection.query("SELECT * FROM products", function(err, result) {
             if (err) throw err;
+            let itemArray = []
                         console.log(title)
                         for (let i = 0; i < result.length; i++) {
-                            let itemID = result[i].item_id;
-                            let productName = result[i].product_name;
+                            itemArray.push(result[i].item_id)
+                            itemArray.push(result[i].product_name)
                             // let departmentName = result[i].department_name;
-                            let price = result[i].price;
-                            let stockQuantity = result[i].stock_quantity;
-                            console.log("---------------------")
-                            console.log(itemID + "  ||  " + productName+ "  ||   " + price + "    ||  " + stockQuantity);
-                            console.log("---------------------")
-
+                            itemArray.push(result[i].price)
+                            itemArray.push(result[i].stock_quantity)
                         }
+                        console.log(itemArray)
                  start();
         })
 }
@@ -99,4 +98,16 @@ var connection = mysql.createConnection({
         }
 
     
+
+        // for (let i = 0; i < result.length; i++) {
+        //     let itemID = result[i].item_id;
+        //     let productName = result[i].product_name;
+        //     // let departmentName = result[i].department_name;
+        //     let price = result[i].price;
+        //     let stockQuantity = result[i].stock_quantity;
+        //  console.log("---------------------")
+        //  console.log(itemID + "  ||  " + productName+ "  ||   " + price + "    ||  " + stockQuantity);
+        //  console.log("---------------------")
+
+        // }
 
