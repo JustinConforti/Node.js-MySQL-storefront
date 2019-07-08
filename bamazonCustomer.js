@@ -1,7 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer")
 const cTable = require('console.table');
-let title = "ID" + "    " + "Product Name" + "   " + "Price" + "    " + "Stock Quantity"
+var Table = require('easy-table')
+var userTotalSpent = 0;
+
 
 
 var connection = mysql.createConnection({
@@ -26,19 +28,31 @@ var connection = mysql.createConnection({
     function displayItems() {
         connection.query("SELECT * FROM products", function(err, result) {
             if (err) throw err;
-            let itemArray = []
-                        console.log(title)
+            let fullItemArray = [];
+                    
                         for (let i = 0; i < result.length; i++) {
-                            itemArray.push(result[i].item_id)
-                            itemArray.push(result[i].product_name)
+                            let itemArray = 
+                            { id : result[i].item_id,
+                            name : result[i].product_name,
                             // let departmentName = result[i].department_name;
-                            itemArray.push(result[i].price)
-                            itemArray.push(result[i].stock_quantity)
+                            price : result[i].price,
+                            quantity : result[i].stock_quantity
+                            }
+                            fullItemArray.push(itemArray)
                         }
-                        console.log(itemArray)
-                 start();
-        })
-}
+                        var t = new Table
+                 fullItemArray.forEach(function(product) {
+                   t.cell('Product Id', product.id)
+                   t.cell('name', product.name)
+                   t.cell('Price, USD', product.price, Table.number(2))
+                   t.cell('quantity', product.quantity)
+                   t.newRow()                        
+ })
+
+         console.log(t.toString())
+        start();
+})
+    }
 
     function start() {
         inquirer
@@ -58,17 +72,16 @@ var connection = mysql.createConnection({
         .then(function(user) {
             let userItem = user.itemID
             let userRequest = user.quantity
-            console.log(user.itemID)
            connection.query("SELECT * FROM products", function(err, result) {
-                console.log(result)
             quantityOfItem = result[userItem - 1].stock_quantity
             
             if(quantityOfItem < userRequest) {
-                console.log("No can do! Insufficent quantity, try again.")
+              
+                console.log("             \nNo can do! Insufficent quantity, try again.")
                 start()
                 return;
             } else {
-                console.log("Sure, can do!")
+                console.log("             Sure, can do! Processing order now ")
                 updateDatabase(userItem, quantityOfItem, userRequest)
             }
     })
@@ -76,9 +89,7 @@ var connection = mysql.createConnection({
     }
 
     function updateDatabase(userItem, quantityOfItem, userRequest ) {
-        console.log("User Info: " +userItem, quantityOfItem, userRequest)
         let newStock = quantityOfItem - userRequest
-        console.log(newStock)
         connection.query(
             "UPDATE products SET ? WHERE ?",
             [
@@ -92,22 +103,27 @@ var connection = mysql.createConnection({
             function(error) {
               if (error) throw error;
               console.log("Database successfully updated");
-              displayItems()
+              updateUserTotal(userItem, userRequest);
             }
           );
         }
 
+        function updateUserTotal(userItem, userRequest) {
+          let listOfPrices = [];
+          connection.query("SELECT * FROM products", function(err, result) {
+            if (err) throw err;
+              for (let i = 0; i < result.length; i++) {
+                listOfPrices.push(result[i].price)
+              }
+              let userTotal = listOfPrices[userItem - 1] * userRequest
+              userTotalSpent = userTotalSpent + userTotal
+              console.log("You have spend a total of: " + userTotalSpent+"$")
+          })
+  
+displayItems();
+        }
+
     
 
-        // for (let i = 0; i < result.length; i++) {
-        //     let itemID = result[i].item_id;
-        //     let productName = result[i].product_name;
-        //     // let departmentName = result[i].department_name;
-        //     let price = result[i].price;
-        //     let stockQuantity = result[i].stock_quantity;
-        //  console.log("---------------------")
-        //  console.log(itemID + "  ||  " + productName+ "  ||   " + price + "    ||  " + stockQuantity);
-        //  console.log("---------------------")
 
-        // }
 
