@@ -47,7 +47,7 @@ function displayOptions() {
     inquirer
     .prompt([{
         type: "list",
-        message: "Hello Fellow Manager -- What would you like to do today?",
+        message: "What would you like to do?",
         choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"],
         name: "listedOptions"
     }
@@ -114,13 +114,28 @@ function fullProducts() {
           t.cell('quantity', product.quantity)
           t.newRow()
         })
-    
-        console.log(t.toString())
+        let tString = t.toString()
+        console.log(tString)
+        displayOptions()
 })
+
 }
 
 function lowInventory() {
+    let lowStock  = [];
     console.log("low invetory")
+    connection.query("SELECT * FROM products", function (err, result) {
+        for (let i = 0; i < result.length; i++) {
+            if (result[i].stock_quantity <= 5) {
+                lowStock.push(result[i])
+            }
+        }
+        
+        console.log(lowStock)
+        for (let i = 0; i < lowStock.length; i++) {
+            console.log("lowStock[0].item_id)
+        }
+    })
 }
 
 function addInventory() {
