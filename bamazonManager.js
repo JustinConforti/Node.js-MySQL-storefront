@@ -1,6 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer")
-var Table = require('easy-table')
+var Table = require('cli-table');
 
 
 var connection = mysql.createConnection({
@@ -92,21 +92,22 @@ function fullProducts() {
             }
             fullItemArray.push(itemArray)
         }
-        var t = new Table
-        fullItemArray.forEach(function (product) {
-            t.cell('Product Id', product.id)
-            t.cell('name', product.name)
-            t.cell('Price, USD', product.price, Table.number(2))
-            t.cell('quantity', product.quantity)
-            t.newRow()
-        })
+        var t = new Table ({
+        head: ['Id', 'Name', 'Price, USD', 'Quantity']
+        , colWidths: [5, 20, 15, 15]
+      });
+      for (let i = 0; i < fullItemArray.length; i++) {
+      t.push(
+        [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity]
+      
+      );}
         let tString = t.toString()
         console.log(tString)
         displayOptions()
         return tString
-    })
-
+})
 }
+
 
 function lowInventory() {
     let lowStock = [];
@@ -204,6 +205,6 @@ function newProduct() {
                   price: inquirerResponse.itemPrice,
                   stock_quantity: inquirerResponse.itemQuantity
                 })
-                fullProducts()
+                fullProducts();
         })
 }

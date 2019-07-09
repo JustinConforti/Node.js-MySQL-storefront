@@ -1,7 +1,8 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer")
-var Table = require('easy-table')
+// var Table = require('easy-table')
 var userTotalSpent = 0;
+var Table = require('cli-table');
 
 
 
@@ -38,17 +39,26 @@ function displayItems() {
       }
       fullItemArray.push(itemArray)
     }
-    var t = new Table
-    fullItemArray.forEach(function (product) {
-      t.cell('Product Id', product.id)
-      t.cell('name', product.name)
-      t.cell('Price, USD', product.price, Table.number(2))
-      t.cell('quantity', product.quantity)
-      t.newRow()
-    })
+    var t = new Table({
+      head: ['Id', 'Name', 'Price, USD', 'Quantity']
+    , colWidths: [5, 20, 15, 15]
+  });
+  for (let i = 0; i < fullItemArray.length; i++) {
+  t.push(
+    [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity]
+  
+  );}
+                // Easy Table Function //
+    //   fullItemArray.forEach(function (product) {
+    //   t.cell('Product Id', product.id)
+    //   t.cell('name', product.name)
+    //   t.cell('Price, USD', product.price, Table.number(2))
+    //   t.cell('quantity', product.quantity)
+    //   t.newRow()
+    // })
 
     console.log(t.toString())
-    start();
+    setTimeout(start, 2000);
   })
 }
 
@@ -57,13 +67,13 @@ function start() {
     .prompt([{
         name: "itemID",
         type: "input",
-        message: "Which item would you like to buy? Insert the item's ID",
+        message: "Which item would you like to buy? Insert the item's ID:",
       },
 
       {
         name: "quantity",
         type: "input",
-        message: "How many of these items would you like to buy? Enter a number",
+        message: "How many of these items would you like to buy? Enter a number:",
       }
     ])
     .then(function (user) {
