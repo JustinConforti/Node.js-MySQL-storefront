@@ -1,22 +1,3 @@
-//     * View Products for Sale
-
-//     * View Low Inventory
-
-//     * Add to Inventory
-
-//     * Add New Product
-
-//   * If a manager selects `View Products for Sale`, the app should list every available item: the item IDs, names, prices,
-// and quantities.
-
-//   * If a manager selects `View Low Inventory`, then it should list all items with an inventory count lower than five.
-
-//   * If a manager selects `Add to Inventory`, your app should display a prompt that will let the manager "add more"
-//  of any item currently in the store.
-
-//   * If a manager selects `Add New Product`, it should allow the manager to add a completely new product to the store.
-
-
 var mysql = require("mysql");
 var inquirer = require("inquirer")
 var Table = require('easy-table')
@@ -122,6 +103,7 @@ function fullProducts() {
         let tString = t.toString()
         console.log(tString)
         displayOptions()
+        return tString
     })
 
 }
@@ -153,7 +135,6 @@ function lowInventory() {
 
 
 function addInventory() {
-    console.log("add invetory")
     inquirer
         .prompt([{
                 type: "input",
@@ -169,30 +150,60 @@ function addInventory() {
         .then(function (inquirerResponse) {
             var newItemQuantity = 0;
             let itemIDNumber = inquirerResponse.itemID - 1
-            console.log(itemIDNumber)
+            var managerRequest = inquirerResponse.itemAmount
             connection.query("SELECT * FROM products", function (err, result) {
                 itemInfo = result[inquirerResponse.itemID - 1]
-                console.log(itemInfo)
+                itemName = itemInfo.product_name
                 itemQuantity = itemInfo.stock_quantity
-                console.log(itemQuantity)
                 newItemQuantity = parseInt(itemQuantity) + parseInt(inquirerResponse.itemAmount)
-                console.log(newItemQuantity)
-                console.log(itemIDNumber)
+                updateDataBase(itemIDNumber, newItemQuantity, itemQuantity, managerRequest, itemName)
             })
-            connection.query("UPDATE products SET ? WHERE ?",
-                [{
-                        stock_quantity: newItemQuantity
-                    },
-                    {
-                        item_id: itemIDNumber + 1
-                    }
-                ],
-                console.log("Second" + newItemQuantity)
-            )
         })
 }
 
+function updateDataBase(itemIDNumber, newItemQuantity, itemQuantity, managerRequest, itemName) {
+
+    connection.query("UPDATE products SET ? WHERE ?",
+        [{
+                stock_quantity: newItemQuantity
+            },
+            {
+                item_id: itemIDNumber + 1
+            }
+        ],
+    )
+    console.log("Restocking successful! You've added " + managerRequest + " units to " + itemName)
+    console.log("Heres an updated list of products")
+    fullProducts()
+}
 
 function newProduct() {
     console.log("new product")
+    inquirer
+        .prompt ([
+            {
+                type: "input",
+                message: "What is the name of your new item?",
+                name: "itemName"
+            },
+            {
+                type: "input",
+                message: "What is the price of this item?",
+                name: "itemPrice"
+            },
+            {
+                type:"input",
+                message: "How many of these items do you have?",
+                name: "itemQuantity"
+            }
+        ]).then(function(inquirerResponse) {
+            connection.query(
+                "INSERT INTO products SET ?",
+                {
+                  product_name: inquirerResponse.itemName,
+                  price: inquirerResponse.itemPrice,
+                  stock_quantity: inquirerResponse.itemQuantity
+                })
+                fullProducts()
+        })
 }
