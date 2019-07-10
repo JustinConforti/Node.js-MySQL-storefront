@@ -1,6 +1,6 @@
 var mysql = require("mysql");
-var inquirer = require("inquirer")
-var Table = require('easy-table')
+var inquirer = require("inquirer");
+var Table = require('cli-table');
 
 
 var connection = mysql.createConnection({
@@ -50,5 +50,5 @@ function salesDepartment() {
 
 function newDepartment() {
     console.log("enter new department")
-    
+
 }

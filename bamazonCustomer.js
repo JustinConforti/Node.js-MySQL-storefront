@@ -35,28 +35,20 @@ function displayItems() {
         id: result[i].item_id,
         name: result[i].product_name,
         price: result[i].price,
-        quantity: result[i].stock_quantity
+        quantity: result[i].stock_quantity,
+        product_sales: result[i].product_sales
       }
       fullItemArray.push(itemArray)
     }
     var t = new Table({
-      head: ['Id', 'Name', 'Price, USD', 'Quantity']
-    , colWidths: [5, 20, 15, 15]
+      head: ['Id', 'Name', 'Price, USD', 'Quantity', 'Product_sales']
+    , colWidths: [5, 20, 15, 15, 15]
   });
   for (let i = 0; i < fullItemArray.length; i++) {
   t.push(
-    [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity]
+    [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity, fullItemArray[i].product_sales]
   
   );}
-                // Easy Table Function //
-    //   fullItemArray.forEach(function (product) {
-    //   t.cell('Product Id', product.id)
-    //   t.cell('name', product.name)
-    //   t.cell('Price, USD', product.price, Table.number(2))
-    //   t.cell('quantity', product.quantity)
-    //   t.newRow()
-    // })
-
     console.log(t.toString())
     setTimeout(start, 2000);
   })
@@ -95,6 +87,21 @@ function start() {
     })
 }
 
+function updateProductSale(userItem, currentSaleTotal) {
+  connection.query(
+    "UPDATE products SET ? WHERE ?",
+    [{
+        product_sales: currentSaleTotal 
+      },
+      {
+        item_id: userItem
+      }
+    ],
+  )
+  displayItems();
+
+}
+
 function updateDatabase(userItem, quantityOfItem, userRequest) {
   let newStock = quantityOfItem - userRequest
   connection.query(
@@ -110,6 +117,7 @@ function updateDatabase(userItem, quantityOfItem, userRequest) {
       if (error) throw error;
       console.log("Database successfully updated");
       updateUserTotal(userItem, userRequest);
+
     }
   );
 }
@@ -122,9 +130,10 @@ function updateUserTotal(userItem, userRequest) {
       listOfPrices.push(result[i].price)
     }
     let userTotal = listOfPrices[userItem - 1] * userRequest
-    userTotalSpent = userTotalSpent + userTotal
+   userTotalSpent = userTotalSpent + userTotal
     console.log("You have spend a total of: " + userTotalSpent + "$")
+    let currentTotal = result[userItem - 1].product_sales
+    currentSaleTotal = currentTotal + userTotal
+    updateProductSale(userItem, currentSaleTotal)
   })
-
-  displayItems();
 }

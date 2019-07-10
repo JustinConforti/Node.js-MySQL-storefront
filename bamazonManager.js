@@ -3,6 +3,7 @@ var inquirer = require("inquirer")
 var Table = require('cli-table');
 
 
+
 var connection = mysql.createConnection({
     host: "localhost",
 
@@ -92,45 +93,58 @@ function fullProducts() {
             }
             fullItemArray.push(itemArray)
         }
-        var t = new Table ({
-        head: ['Id', 'Name', 'Price, USD', 'Quantity']
-        , colWidths: [5, 20, 15, 15]
-      });
-      for (let i = 0; i < fullItemArray.length; i++) {
-      t.push(
-        [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity]
-      
-      );}
+        let t = new Table({
+            head: ['Id', 'Name', 'Price, USD', 'Quantity'],
+            colWidths: [5, 20, 15, 15]
+        });
+        for (let i = 0; i < fullItemArray.length; i++) {
+            t.push(
+                [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity]
+
+            );
+        }
         let tString = t.toString()
         console.log(tString)
         displayOptions()
         return tString
-})
+    })
 }
 
 
 function lowInventory() {
-    let lowStock = [];
     console.log("----------------------------------------------")
     console.log("      ----- Low Inventory List ------   ")
     console.log("----------------------------------------------")
     connection.query("SELECT * FROM products", function (err, result) {
+        if(err) throw err;
+        let lowStock = [];
         for (let i = 0; i < result.length; i++) {
             if (result[i].stock_quantity <= 5) {
-                lowStock.push(result[i])
+                let itemArray = {
+                    id: result[i].item_id,
+                    name: result[i].product_name,
+                    price: result[i].price,
+                    quantity: result[i].stock_quantity
+                }
+                lowStock.push(itemArray)
             }
         }
-        var t = new Table
-        lowStock.forEach(function (product) {
-            t.cell('Product Id', product.item_id)
-            t.cell('name', product.product_name)
-            t.cell('Price, USD', product.price, Table.number(2))
-            t.cell('quantity', product.stock_quantity)
-            t.newRow()
-        })
-        let tString = t.toString()
+        let lowInventory = new Table({
+            head: ['Id', 'Name', 'Price, USD', 'Quantity'],
+            colWidths: [5, 20, 15, 15]
+        });
+        for (let i = 0; i < lowStock.length; i++) {
+            lowInventory.push(
+                [lowStock[i].id, lowStock[i].name, lowStock[i].price, lowStock[i].quantity]
+
+            );
+        }
+
+        let tString = lowInventory.toString()
         console.log(tString)
         displayOptions()
+        return tString
+
     })
 }
 
@@ -181,8 +195,7 @@ function updateDataBase(itemIDNumber, newItemQuantity, itemQuantity, managerRequ
 function newProduct() {
     console.log("new product")
     inquirer
-        .prompt ([
-            {
+        .prompt([{
                 type: "input",
                 message: "What is the name of your new item?",
                 name: "itemName"
@@ -193,18 +206,17 @@ function newProduct() {
                 name: "itemPrice"
             },
             {
-                type:"input",
+                type: "input",
                 message: "How many of these items do you have?",
                 name: "itemQuantity"
             }
-        ]).then(function(inquirerResponse) {
+        ]).then(function (inquirerResponse) {
             connection.query(
-                "INSERT INTO products SET ?",
-                {
-                  product_name: inquirerResponse.itemName,
-                  price: inquirerResponse.itemPrice,
-                  stock_quantity: inquirerResponse.itemQuantity
+                "INSERT INTO products SET ?", {
+                    product_name: inquirerResponse.itemName,
+                    price: inquirerResponse.itemPrice,
+                    stock_quantity: inquirerResponse.itemQuantity
                 })
-                fullProducts();
+            fullProducts();
         })
 }
