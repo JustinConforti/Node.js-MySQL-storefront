@@ -36,17 +36,17 @@ function displayItems() {
         name: result[i].product_name,
         price: result[i].price,
         quantity: result[i].stock_quantity,
-        product_sales: result[i].product_sales
+        // product_sales: result[i].product_sales
       }
       fullItemArray.push(itemArray)
     }
     var t = new Table({
-      head: ['Id', 'Name', 'Price, USD', 'Quantity', 'Product_sales']
-    , colWidths: [5, 20, 15, 15, 15]
+      head: ['Id', 'Name', 'Price, USD', 'Quantity']
+    , colWidths: [5, 20, 15, 15]
   });
   for (let i = 0; i < fullItemArray.length; i++) {
   t.push(
-    [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity, fullItemArray[i].product_sales]
+    [fullItemArray[i].id, fullItemArray[i].name, fullItemArray[i].price, fullItemArray[i].quantity]
   
   );}
     console.log(t.toString())
