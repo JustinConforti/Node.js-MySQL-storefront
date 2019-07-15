@@ -20,7 +20,7 @@ After a three second delay the customer will be prompted for the Item ID of the 
 
 ![Alt text](/second_picture.jpg?raw=true "First Prompt")
 
-After a purchase the product table is updated and redisplayed with appropriate changes, as well as a prompt showing the customers total amount of money spent. 
+After the purchase is processed the product table is updated and redisplayed with appropriate changes, as well as a prompt showing the customers total amount of money spent. 
 
 ![Alt text](/third_picture.jpg?raw=true "Updated Table")
 
@@ -68,6 +68,20 @@ and will display a full table of all items including the new item the manager ha
 Supervisor View: 
 
 		(under construction coming soon)
+
+
+Tools Used For This App:
+
+Javascript
+Node.js
+mySQL Database
+
+NPM Packages:
+Cli-table
+easy-table
+inquirer
+mysql
+
 
 
 
