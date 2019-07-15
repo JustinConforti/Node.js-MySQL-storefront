@@ -12,16 +12,17 @@
 Customer View: (bamazonCustomer.js)
 
 As you access the bamazon customer view, you will be greated and displayed a table (using package 'table-cli') of all available products in the store sorted by 
-
 (ID, Product Name, Price($), Quantity)
-![Alt text](/first_picture.jpg?raw=true "Optional Title")
 
-After a three second delay the customer will be prompted for the Item ID of the product the customer is interested in buying and how many
- (picture here of command line asking for item ID)
+![Alt text](/first_picture.jpg?raw=true "Initial Table")
 
-After a purchase the table is updated and redisplayed with appropriate changes, as well as a prompt showing the customers total amount of money spent. 
+After a three second delay the customer will be prompted for the Item ID of the product the customer is interested in buying and how many they would like
 
+![Alt text](/second_picture.jpg?raw=true "First Prompt")
 
+After a purchase the product table is updated and redisplayed with appropriate changes, as well as a prompt showing the customers total amount of money spent. 
+
+![Alt text](/third_picture.jpg?raw=true "Updated Table")
 
 
 Manager View: (bamazonManager.js)
@@ -32,36 +33,34 @@ As you access the bamazon manager view, you will be greated and displayed four s
 -View Low Inventory
 -Add to Inventory
 -Add New Product
-(picture of display of 4 options)
+![Alt text](/fourth_picture.jpg?raw=true "Four Options")
 
 View Products for Sale:
 
 This option will display a full table of all items, price, and the amount in stock
-(picture of table)
+![Alt text](/fifth_picture.jpg?raw=true "Full Table")
 
 View Low Inventory:
 
 This option will display a table of all items with an inventory of less than five. 
-(picture of low inventory table)
+![Alt text](/sixth_picture.jpg?raw=true "Low Inventory")
 
 Add to Inventory:
 
-This option will prompt the user asking for the item ID of the product the manager wants to restock.
-(picture of restock item prompt)
-followed by a second prompt asking for how many of this item they would like restock.
-(picture of second prompt)
+This option will prompt the user asking for the item ID of the product the manager wants to restock followed by a second prompt asking for how many of this item they would like restock.
+
+![Alt text](/seventh_picture.jpg?raw=true "Restock Prompt")
 and will display a full table of all items reflecting restock changes done by the manager.
 
 Add New Product:
 
-This option will prompt the user asking for the name of the new product name
-(picture of first prompt)
-a second prompt will appear asking the manager for the price of this new item.
-(picture of second prompt)
-and a third prompt will appear asking the manager for how many of this new item they have.
-(picture of third prompt)
+This option will prompt the user asking for the name of the new product name followed by a second prompt asking the manager for the price of this new item
+followed by a final prompt asking the manager for how many of this new item they have.
+
+![Alt text](/eighth_picture.jpg?raw=true "Prompts")
+
 and will display a full table of all items including the new item the manager has added.
-(picture of fourth prompt)
+![Alt text](/nineth_picture.jpg?raw=true "final table")
 
 
 
